@@ -10,6 +10,7 @@ class Product(models.Model):
 	icon = models.ImageField(upload_to='images/')
 	votes_total = models.IntegerField(default=1)
 	hunter = models.ForeignKey(User, on_delete=models.CASCADE) # id of the user, if user is deleted -> product deleted
+	tags = models.CharField(max_length=100, default='')
 	
 	def __str__(self):
 		return self.title

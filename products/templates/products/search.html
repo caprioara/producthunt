@@ -2,15 +2,9 @@
 
 {% block content %}
 
-<div>
-	{% for product in products.all %}
-		{% if product.tags != "" %}
-			<div onclick="window.location='{% url 'search' %}';" style="display: inline-block;">{{ product.tags }}</div>
-		{% endif %}
-	{% endfor%}
-</div>
 
 {% for product in products.all %}
+
 <div class="row pb-3">
 	<div class="col-4" onclick="window.location='{% url 'detail' product.id %}';" style="cursor: pointer">
 		<img src="{{ product.icon.url }}" class="img-fluid" />
@@ -29,9 +23,6 @@
 	<input type="hidden">
 </form>
 
-<script type="text/javascript">
-	document.getElementById("id_q").value = "{{ query }}"
-</script>
 {% endfor %}
 
 {% endblock %}

@@ -3,10 +3,35 @@ from django.contrib.auth.decorators import login_required
 from .models import Product
 from django.utils import timezone
 
+from django.db.models import Q
+
 # Create your views here.
 def home(request):
+	# query = ""
+	# if request.GET:
+	# 	query = request.GET['q']
+	# 	context['query'] = str(query)
+	# tags = Product.objects.tags
 	products = Product.objects
 	return render(request, 'products/home.html',{'products':products})
+
+def search(request):
+	products = Product.objects
+	return render(request, 'products/search.html',{'products':products})
+
+# def search(query=None):
+# 	queryset = []
+# 	queries = query.split(" ") # samsung s8 -> queryset = [samsung, s8]
+# 	for q in queries:
+# 		posts = Product.objects.filter(
+# 				Q(title__icontrains=q) | Q(body__icontains=q)
+# 			).distinct()
+
+# 		for post in posts:
+# 			queryset.append(post)
+
+# 	return list(set(queryset))
+
 
 
 @login_required(login_url="/accounts/signup")
@@ -45,6 +70,19 @@ def upvote(request, product_id):
 		product.votes_total += 1
 		product.save()
 		return redirect('/products/' + str(product.id))
+
+# def search(query=None):
+# 	queryset = []
+# 	queryset = query.split(" ") # samsung s8 -> queryset = [samsung, s8]
+# 	for q in queries:
+# 		posts = Product.objects.filter(
+# 				Q(title__icontrains=q) | Q(body__icontains=q)
+# 			).distinct()
+
+# 		for post in posts:
+# 			queryset.append(post)
+
+# 	return list(set(queryset))
 
 
 
