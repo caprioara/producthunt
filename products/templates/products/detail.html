@@ -17,7 +17,8 @@
 		<img src="{{ product.image.url }}" class="img-fluid" />
 	</div>
 	<div class="col-4">
-		<a href="javascript:{document.getElementById('upvoteid').submit()}"><button class="btn btn-primary btn-lg btn-block">Upvote {{product.votes_total}} </button></a>
+		<a href="javascript:{document.getElementById('upvoteid').submit()}"><button style="margin-bottom: 4px;" class="btn btn-primary btn-lg btn-block">Upvote {{product.votes_total}} </button></a>
+		<a href="javascript:{document.getElementById('delete_voteid').submit()}"><button class="btn btn-danger btn-lg btn-block" >Delete All Votes </button></a>
 	</div>
 </div>
 
@@ -37,6 +38,11 @@
 </div>
 
 <form id="upvoteid" method="POST" action="{% url 'upvote' product.id %}">
+	{% csrf_token %}
+	<input type="hidden">
+</form>
+
+<form id="delete_voteid" method="POST" action="{% url 'delete' product.id %}">
 	{% csrf_token %}
 	<input type="hidden">
 </form>

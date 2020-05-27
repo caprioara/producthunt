@@ -1,6 +1,6 @@
 from django.shortcuts import render, redirect, get_object_or_404
 from django.contrib.auth.decorators import login_required
-from .models import Product
+from .models import Product, Tag
 from django.utils import timezone
 from django.views.generic import TemplateView
 
@@ -14,7 +14,13 @@ def home(request):
 	# 	context['query'] = str(query)
 	# tags = Product.objects.tags
 	products = Product.objects
-	return render(request, 'products/home.html',{'products':products})
+	tags = Tag.objects
+	unic_tags = []
+	for tag in tags.all():
+		unic_tags.append(tag.name)
+	unic_tags = list(dict.fromkeys(unic_tags))
+	print(unic_tags)
+	return render(request, 'products/home.html',{'products':products, 'unic_tags':unic_tags})
 
 def search(request):
 	products = Product.objects
@@ -30,7 +36,7 @@ class ListProductsByTag(TemplateView):
 		print(tag_url)
 		context = {}
 		context['products'] = Product.objects.filter(tag__name=tag_url)
-
+		return render(request, self.template_name, context)
 
 		# term = kwargs['term']
 		# Qd = Q()
@@ -40,7 +46,7 @@ class ListProductsByTag(TemplateView):
 		# context['products'] = Product.objects.filter(Qd)
 
 
-		return render(request, self.template_name, context)
+
 
 
 # def search(query=None):
@@ -92,6 +98,15 @@ def upvote(request, product_id):
 	if request.method == 'POST':
 		product = get_object_or_404(Product, pk=product_id)
 		product.votes_total += 1
+		product.save()
+		return redirect('/products/' + str(product.id))
+
+		
+@login_required(login_url="/accounts/signup")
+def delete(request, product_id):
+	if request.method == 'POST':
+		product = get_object_or_404(Product, pk=product_id)
+		product.votes_total = 0
 		product.save()
 		return redirect('/products/' + str(product.id))
 
