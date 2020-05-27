@@ -1,6 +1,7 @@
 from django.shortcuts import render, redirect, get_object_or_404
 from django.contrib.auth.decorators import login_required
 from .models import Product, Tag
+from django.contrib.auth.models import User # a mers
 from django.utils import timezone
 from django.views.generic import TemplateView
 
@@ -101,7 +102,19 @@ def upvote(request, product_id):
 		product.save()
 		return redirect('/products/' + str(product.id))
 
-		
+# @login_required(login_url="/accounts/signup")
+# def upvote(request, product_id):
+# 	if request.method == 'POST':
+# 		for user in User.objects.all():
+# 			if get_username() == user.username:
+# 				print("Ai votat")
+# 			else: 
+# 				product = get_object_or_404(Product, pk=product_id)
+# 				product.votes_total = 0
+# 				product.save()
+# 				return redirect('/products/' + str(product.id))
+
+
 @login_required(login_url="/accounts/signup")
 def delete(request, product_id):
 	if request.method == 'POST':
